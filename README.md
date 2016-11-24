@@ -1,2 +1,2 @@
 # trifulx
-Java XML reader and writer
+A Java XML reader and writer
