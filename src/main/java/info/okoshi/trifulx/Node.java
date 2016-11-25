@@ -213,6 +213,11 @@ public interface Node {
 
   Node removeChildren(String name);
 
+  /**
+   * Get XML tag name.<br>
+   *
+   * @return tag name
+   */
   String tagName();
 
   Attribute tryAttr(String name);
