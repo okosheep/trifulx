@@ -90,7 +90,10 @@ public class NodeImplCreator implements NodeCreator {
     @Override
     public Attribute attr(String name) {
       Value value = Value.valueOf(element.getAttributeValue(name));
-      return new Attribute(name, value);
+      if (!value.exists()) {
+        throw new ParseException("\"" + name + "\" attribute is not found.");
+      }
+      return new AttributeImpl(name, value);
     }
 
     /**
@@ -100,6 +103,12 @@ public class NodeImplCreator implements NodeCreator {
      */
     @Override
     public Node attr(String name, Value attribute) {
+      if (name == null) {
+        throw new IllegalArgumentException("Argument \"name\" is not must be null.");
+      }
+      if (attribute == null) {
+        throw new IllegalArgumentException("Argument \"attribute\" is not must be null.");
+      }
       element.setAttribute(name, attribute.stringValue());
       return this;
     }
@@ -124,7 +133,7 @@ public class NodeImplCreator implements NodeCreator {
     @Override
     public List<Attribute> attrs() {
       List<Attribute> list = new ArrayList<>();
-      element.getAttributes().forEach(a -> list.add(new Attribute(a.getName(), Value.valueOf(a.getValue()))));
+      element.getAttributes().forEach(a -> list.add(new AttributeImpl(a.getName(), Value.valueOf(a.getValue()))));
       return list;
     }
 
@@ -144,7 +153,13 @@ public class NodeImplCreator implements NodeCreator {
      * @see info.okoshi.trifulx.Node#copyTo(info.okoshi.trifulx.Node)
      */
     @Override
-    public Node copyTo(Node node) {
+    public Node copyTo(Node node) throws UnsupportedOperationException, IllegalArgumentException {
+      if (!exists()) {
+        throw new UnsupportedOperationException("Can't move non existence object.");
+      }
+      if (!node.exists()) {
+        throw new IllegalArgumentException("Can't move to non existence object.");
+      }
       Element copied = element.clone();
       copied.detach();
       node.node(new NodeImpl(copied, exists));
@@ -167,7 +182,13 @@ public class NodeImplCreator implements NodeCreator {
      * @see info.okoshi.trifulx.Node#moveTo(info.okoshi.trifulx.Node)
      */
     @Override
-    public Node moveTo(Node node) {
+    public Node moveTo(Node node) throws UnsupportedOperationException, IllegalArgumentException {
+      if (!exists()) {
+        throw new UnsupportedOperationException("Can't move non existence object.");
+      }
+      if (!node.exists()) {
+        throw new IllegalArgumentException("Can't move to non existence object.");
+      }
       node.node(this);
       remove();
       return this;
@@ -385,7 +406,7 @@ public class NodeImplCreator implements NodeCreator {
     @Override
     public Attribute tryAttr(String name) {
       Value v = Value.valueOf(Optional.ofNullable(element.getAttributeValue(name)));
-      return new Attribute(name, v);
+      return new AttributeImpl(name, v);
     }
 
     /**

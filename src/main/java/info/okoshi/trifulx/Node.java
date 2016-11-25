@@ -50,9 +50,9 @@ public interface Node {
    *
    * @param name
    *          Attribute name
-   * @return Attribute
+   * @return Attribute value
    */
-  Attribute attr(String name);;
+  Attribute attr(String name);
 
   /**
    * Set attribute to node.<br>
@@ -92,8 +92,12 @@ public interface Node {
    * @param node
    *          {@link Node} object
    * @return Self object
+   * @throws UnsupportedOperationException
+   *           Tried copy non existence object
+   * @throws IllegalArgumentException
+   *           Tried copy to non existence object
    */
-  Node copyTo(Node node);
+  Node copyTo(Node node) throws UnsupportedOperationException, IllegalArgumentException;
 
   /**
    * Node existence.<br>
@@ -108,8 +112,12 @@ public interface Node {
    * @param node
    *          {@link Node} object
    * @return Self object
+   * @throws UnsupportedOperationException
+   *           Tried move non existence object
+   * @throws IllegalArgumentException
+   *           Tried move to non existence object
    */
-  Node moveTo(Node node);
+  Node moveTo(Node node) throws UnsupportedOperationException, IllegalArgumentException;
 
   /**
    * Append child node.<br>

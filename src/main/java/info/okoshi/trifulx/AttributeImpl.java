@@ -23,7 +23,8 @@
  */
 package info.okoshi.trifulx;
 
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * Attribute for data transfer object.<br>
@@ -31,26 +32,25 @@ import java.io.Serializable;
  * @version 1.0.0
  * @author okosheep
  */
-public interface Attribute extends Serializable {
+@Data
+@AllArgsConstructor
+public class AttributeImpl implements Attribute {
+
+  /** Serial version */
+  private static final long serialVersionUID = -4573276821156428857L;
+
+  /** Name of attribute */
+  private String name;
+
+  /** Value of attribute */
+  private Value value;
 
   /**
    * Existence.<br>
    *
    * @return <code>true</code> means exist, otherwise is <code>false</code>
    */
-  boolean exists();
-
-  /**
-   * Get name of attribute.<br>
-   *
-   * @return name
-   */
-  String getName();
-
-  /**
-   * Get value of attribute.<br>
-   *
-   * @return value
-   */
-  Value getValue();
+  public boolean exists() {
+    return getValue().exists();
+  }
 }
